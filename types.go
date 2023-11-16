@@ -6,10 +6,6 @@ type Option interface {
 	apply(*Worker)
 }
 
-//type options struct {
-//	opts []Option
-//}
-
 type OptionFunc func(*Worker)
 
 func (o OptionFunc) apply(worker *Worker) {

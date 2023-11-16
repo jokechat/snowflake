@@ -29,10 +29,20 @@ func (i ID) Base32Lower() string {
 	return strings.ToLower(i.Base32())
 }
 
-func (i ID) UnixMilli(w *Worker) int64 {
-	return w.epoch.UnixMilli() + int64(i.Uint64()>>timeShift)
+func (i ID) UnixMilli(epoch time.Time) int64 {
+	return epoch.UnixMilli() + int64(i.Uint64()>>timeShift)
 }
 
-func (i ID) Time(w *Worker) time.Time {
-	return time.UnixMilli(i.UnixMilli(w))
+func (i ID) WorkId() uint64 {
+	d := i.Uint64() >> workerShift & uint64(workerMax)
+	return d
+}
+
+func (i ID) Step() uint64 {
+	d := i.Uint64() & uint64(stepMax)
+	return d
+}
+
+func (i ID) Time(epoch time.Time) time.Time {
+	return time.UnixMilli(i.UnixMilli(epoch))
 }

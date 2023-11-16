@@ -64,9 +64,9 @@ func (w *Worker) Next() ID {
 		}
 	} else {
 		w.step = 0
-		// todo 持久化存储当前时间
+		// todo 持久化存储当前时间,文件或者redis
 	}
 	w.timestamp = now
-	id := int64((now-w.epoch.UnixMilli())<<timeShift | (w.workerId << workerShift) | (w.step))
+	id := (now-w.epoch.UnixMilli())<<timeShift | (w.workerId << workerShift) | w.step
 	return ID(id)
 }
