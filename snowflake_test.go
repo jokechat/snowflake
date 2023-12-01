@@ -49,7 +49,7 @@ func TestId(t *testing.T) {
 		spew.Dump(id.Base32())
 		spew.Dump(id.Base32Lower())
 		spew.Dump(id.UnixMilli(w.epoch))
-		spew.Dump(id.Time(w.epoch))
+		spew.Dump(id.Time(w.GetEpoch()))
 		step++
 	}
 

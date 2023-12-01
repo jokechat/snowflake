@@ -45,6 +45,10 @@ func NewWorkerWithOpts(opts ...Option) (*Worker, error) {
 	return w, nil
 }
 
+func (w *Worker) GetEpoch() time.Time {
+	return w.epoch
+}
+
 func (w *Worker) Next() ID {
 	w.mu.Lock()
 	defer w.mu.Unlock()
