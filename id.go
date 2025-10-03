@@ -25,6 +25,34 @@ func (i ID) Base32() string {
 	return base32.HexEncoding.WithPadding(base32.NoPadding).EncodeToString(bytesBuffer.Bytes())
 }
 
+func shuffleBytes(b []byte) {
+	n := len(b)
+	for j := 0; j < n/2; j++ {
+		k := (j*7 + 3) % n
+		b[j], b[k] = b[k], b[j]
+	}
+}
+
+func (i ID) Base62() string {
+	const alphabet = "r4fVqD0jM7pS2cLTKmXxzGY5vFNuB8n1RkOZyaQsg6WCe9lhHJdPi3wUtoAbE"
+	num := i.Uint64() ^ 0x9E3779B97F4A7C15
+	if num == 0 {
+		return string(alphabet[0])
+	}
+	var encoded []byte
+	base := uint64(len(alphabet))
+	for num > 0 {
+		rem := num % base
+		encoded = append(encoded, alphabet[rem])
+		num /= base
+	}
+	for j, k := 0, len(encoded)-1; j < k; j, k = j+1, k-1 {
+		encoded[j], encoded[k] = encoded[k], encoded[j]
+	}
+	shuffleBytes(encoded)
+	return string(encoded)
+}
+
 func (i ID) Base32Lower() string {
 	return strings.ToLower(i.Base32())
 }
